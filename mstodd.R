@@ -32,14 +32,16 @@ setMethod("==",
           })
 
 # Extend %in% to operate over lists of nodes
+my.in <- function(x,table) {
+  if(length(table) == 0) return(FALSE)
+  else if(table[[1]] == x) return(TRUE)
+  else return(my.in(x, table[-1]))
+}
+
 setGeneric("%in%")
 setMethod("%in%",
           c(x="Node",table="list"),
-          function(x,table) {
-            if(length(table) == 0) return(FALSE)
-            else if(table[[1]] == x) return(TRUE)
-            else return(x %in% table[-1])
-          })
+          my.in)
 
 # For adding a node to a graph.
 setGeneric("add.node",function(g,data) standardGeneric("add.node"))
